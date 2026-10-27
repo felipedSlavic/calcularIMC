@@ -20,18 +20,21 @@
     async function calcular(){
     const peso = document.getElementById("peso").value;
     const altura = document.getElementById("altura").value;
-    const imc = document.getElementById("resultadoImc").value;
-    const url = `/imc/calcular/?peso=${peso}&altura=${altura}/classificar?imc={imc}`;
     const campo1 = document.getElementById("resultadoImc");
     const campo2 = document.getElementById("classificacao");
-    const resultado = await fecth(url);
 
-    if(resultado.ok){
-    campo1.value = await resultado.text();
-    campo2.value = await resultado.text();
-    }else{
-     campo.value = "Erro"
+    const respostaImc = await fetch(`/imc/calcular/?peso=${peso}&altura=${altura}`);
+    if (!respostaImc.ok){
+    cammpo1.value = "Erro ao executar a operação"
+    return;
     }
+
+    const imc = await respostaImc.text();
+    campoImc.value = Number(imc).toFixex(2);
+
+ const respostaClassificacao = await fetch(`/imc/classificar?imc=${imc}`);
+    campoClassificacao.value = await respostaClassificacao.text();
+
   }
 
 </script>
